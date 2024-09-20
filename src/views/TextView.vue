@@ -1,8 +1,8 @@
 <script setup>
-import { useTextChatStore } from '../stores/textChat';
-
-const textChatStore = useTextChatStore();
-
+import { useTextChatStore } from '../stores/textChat'
+import { useTokenizeStore } from '../stores/tokenize'
+const textChatStore = useTextChatStore()
+const tokenizeStore = useTokenizeStore()
 function sendQuestion() {
   textChatStore.createPrompt()
   textChatStore.sendPrompt()
@@ -64,6 +64,10 @@ function sendQuestion() {
       >
         {{ textChatStore.gptResponse }}
       </div>
+    </div>
+    <!-- Token Count -->
+    <div v-if="tokenizeStore.tokenLength" class="text-xs mt-1">
+      Token length: {{ tokenizeStore.tokenLength }}
     </div>
   </article>
   <!-- Clear button to reset all the data -->

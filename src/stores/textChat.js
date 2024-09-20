@@ -1,7 +1,9 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { useTokenizeStore } from './tokenize';
 
 export const useTextChatStore = defineStore('textChat', () => {
+  const tokenizeStore = useTokenizeStore();
   const text = ref('')
   const question = ref('')
   const prompt = ref([]);
@@ -19,7 +21,9 @@ export const useTextChatStore = defineStore('textChat', () => {
       instructions,
       textToAnalyze,
       chatQuestion,
-    ]
+    ];
+
+    tokenizeStore.checkToken(instructions.content + textToAnalyze.content + chatQuestion.content);
   }
   function sendPrompt() {
     if (text.value.length === 0) {
@@ -34,7 +38,7 @@ export const useTextChatStore = defineStore('textChat', () => {
       })
         .then(response => response.json())
         .then(data => {
-          gptResponse.value = data.data
+          gptResponse.value = data.data.content;
         })
         .catch(error => console.error(error))
       }
