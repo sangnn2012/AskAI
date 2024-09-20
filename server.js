@@ -39,4 +39,27 @@ app.post('/chat', async (req, res) => {
     }
 });
 
+const { encode } = require('gpt-3-encoder');
+
+app.post('/tokenize', async (req, res) => {
+    const { stringToTokenize: str } = req.body;
+
+    try {
+        if (str == null) {
+            throw new Error('No string was provided');
+        }
+
+        const encoded = encode(str);
+        const length = encoded.length;
+
+        return res.status(200).json({
+            success: true,
+            tokens: length
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
